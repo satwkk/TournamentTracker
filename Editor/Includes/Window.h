@@ -3,9 +3,9 @@
 #include "imgui/imgui.h"
 #include <GLFW/glfw3.h>
 #include <vector>
+#include "Layer.h"
 
 struct GLFWwindow;
-struct Layer;
 
 struct WindowData
 {

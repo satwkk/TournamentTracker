@@ -18,9 +18,6 @@
     <ClInclude Include="Includes\Tournament.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\IInputReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Tournament.cpp">

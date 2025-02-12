@@ -141,7 +141,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Includes\IInputReader.h" />
     <ClInclude Include="Includes\Tournament.h" />
   </ItemGroup>
   <ItemGroup>

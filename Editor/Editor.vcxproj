@@ -29,6 +29,8 @@
     <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Layer.cpp" />
+    <ClCompile Include="Src\Widgets\Background.cpp" />
+    <ClCompile Include="Src\Widgets\Widget.cpp" />
     <ClCompile Include="Src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -63,9 +65,12 @@
     <ClInclude Include="Includes\AppContext.h" />
     <ClInclude Include="Includes\Layer.h" />
     <ClInclude Include="Includes\LayerUpdates\UpdateLayerMainMenu.h" />
+    <ClInclude Include="Includes\LayerUpdates\UpdateStandingsLayer.h" />
     <ClInclude Include="Includes\UpdateLayers.h" />
     <ClInclude Include="Includes\LayerUpdates\UpdateMainLayer.h" />
     <ClInclude Include="Includes\Vector2.h" />
+    <ClInclude Include="Includes\Widgets\Background.h" />
+    <ClInclude Include="Includes\Widgets\Widget.h" />
     <ClInclude Include="Includes\Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +164,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies;$(ProjectDir)Includes;$(SolutionDir)Core;$(ProjectDir)Dependencies\imgui;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TournamentLib\Includes;$(ProjectDir)Dependencies;$(ProjectDir)Includes;$(SolutionDir)Core;$(ProjectDir)Dependencies\imgui;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,7 +181,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies;$(ProjectDir)Includes;$(SolutionDir)Core;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)TournamentLib\Includes;$(ProjectDir)Dependencies;$(ProjectDir)Includes;$(SolutionDir)Core;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

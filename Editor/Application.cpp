@@ -65,16 +65,19 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    glfwSetWindowUserPointer(mainWindow.GlfwHandle, &Context);
     InitImguiContext(mainWindow);
 
     // Create layers
     std::map<std::string, Layer> LayerMap = {
-        { "MainLayer", CreateLayer("MainLayer", 0.f, 0.f, 20.f, 20.f, UpdateMainLayer) },
-        { "MainMenuLayer", CreateLayer("MainMenuLayer", 0.f, 0.f, 20.f, 20.f, UpdateMainMenuLayer) },
+        { "MainLayer",          CreateLayer("MainLayer", 0.f, 0.f, 20.f, 20.f, UpdateMainLayer) },
+        { "MainMenuLayer",      CreateLayer("MainMenuLayer", 0.f, 0.f, 20.f, 20.f, UpdateMainMenuLayer) },
+        { "Standings",          CreateLayer("Standings", 0.f, 0.f, 20.f, 20.f, UpdateStandingsLayer) },
     };
 
     PushLayer(mainWindow, LayerMap["MainLayer"]);
     PushLayer(mainWindow, LayerMap["MainMenuLayer"]);
+    PushLayer(mainWindow, LayerMap["Standings"]);
 
     // CONTEXT INITIALIZATION, DO IT AT LAST WHEN EVERYTHING IS INITIALIZED
     Context.MainWindowHandle = &mainWindow;
