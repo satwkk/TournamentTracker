@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Widgets/Background.h"
-#include "Widgets/Widget.h"
 #include "GLFW/glfw3.h"
 #include "AppContext.h"
 #include <vector>
@@ -11,8 +9,6 @@ char g_TeamNameBuffer[50];
 
 static void UpdateLayer_MainMenu(const Window& Handle)
 {
-	IWidget::StartFrame();
-
 	{
 		ImGui::Begin("Team Creation", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNavInputs);
 		{
@@ -40,6 +36,7 @@ static void UpdateLayer_MainMenu(const Window& Handle)
 
 			if (ImGui::Button("Start Tournament"))
 			{
+				InitializeTournament(&ctx->RegisteredTeams[0], ctx->RegisteredTeams.size(), 5);
 				RenderWindowNextLayer(const_cast<Window&>(Handle));
 			}
 
@@ -82,6 +79,4 @@ static void UpdateLayer_MainMenu(const Window& Handle)
 
 		ImGui::End();
 	}
-
-	IWidget::EndFrame();
 }

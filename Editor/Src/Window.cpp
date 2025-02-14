@@ -1,6 +1,8 @@
 #include "Window.h"
 #include "Layer.h"
 #include <iostream>
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 
 bool CreateWindow(const WindowData& Data, Window& OutWindowHandle)
@@ -45,7 +47,16 @@ void UpdateWindow(const Window& Handle)
         glfwGetFramebufferSize(Handle.GlfwHandle, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
 		UpdateWindowLayers(Handle);
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		glfwSwapBuffers(Handle.GlfwHandle);
 	}
 

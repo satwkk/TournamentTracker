@@ -29,8 +29,6 @@
     <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Layer.cpp" />
-    <ClCompile Include="Src\Widgets\Background.cpp" />
-    <ClCompile Include="Src\Widgets\Widget.cpp" />
     <ClCompile Include="Src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -69,8 +67,6 @@
     <ClInclude Include="Includes\UpdateLayers.h" />
     <ClInclude Include="Includes\LayerUpdates\UpdateMainLayer.h" />
     <ClInclude Include="Includes\Vector2.h" />
-    <ClInclude Include="Includes\Widgets\Background.h" />
-    <ClInclude Include="Includes\Widgets\Widget.h" />
     <ClInclude Include="Includes\Window.h" />
   </ItemGroup>
   <ItemGroup>

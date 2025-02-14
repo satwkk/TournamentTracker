@@ -48,12 +48,6 @@
     <ClCompile Include="Src\Layer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Widgets\Background.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Widgets\Widget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Dependencies\imgui\.editorconfig" />
@@ -115,12 +109,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Includes\Vector2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\Widgets\Background.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\Widgets\Widget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Includes\LayerUpdates\UpdateStandingsLayer.h">

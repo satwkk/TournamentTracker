@@ -8,10 +8,6 @@
 
 static void UpdateLayer_Main(const Window& Handle)
 {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
     // Background
     {
         ImGui::Begin("Background", nullptr, ImGuiWindowFlags_NoMouseInputs);
@@ -45,7 +41,4 @@ static void UpdateLayer_Main(const Window& Handle)
 
         ImGui::End();
     }
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

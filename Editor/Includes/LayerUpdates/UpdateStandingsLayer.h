@@ -3,15 +3,10 @@
 #include <vector>
 
 #include "AppContext.h"
-#include "Widgets/Widget.h"
 #include "Window.h"
 
 static void UpdateLayer_Standings(const Window& Handle)
 {
-	IWidget::StartFrame();
-
-	AppContext* ctx = (AppContext*)glfwGetWindowUserPointer(Handle.GlfwHandle);
-
 	ImGui::Begin("Standings");
 
 	// Editable league table
@@ -20,11 +15,11 @@ static void UpdateLayer_Standings(const Window& Handle)
 		{
 			ImGui::TableSetupColumn("TeamName");
 
-			for (uint32_t i = 0; i < ctx->RegisteredTeams.size(); i++)
+			for (uint32_t i = 0; Context != nullptr && i < Context->NumRegisteredTeams; i++)
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
-				ImGui::Text("%s", ctx->RegisteredTeams[i].TeamName.c_str());
+				ImGui::Text("%s", Context->RegisteredTeams[i].TeamName.c_str());
 			}
 
 			ImGui::EndTable();
@@ -32,6 +27,4 @@ static void UpdateLayer_Standings(const Window& Handle)
 	}
 
 	ImGui::End();
-
-	IWidget::EndFrame();
 }
