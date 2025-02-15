@@ -41,22 +41,28 @@ void UpdateWindow(const Window& Handle)
 {
 	while (!glfwWindowShouldClose(Handle.GlfwHandle))
 	{
+		// Poll events
 		glfwPollEvents();
 
+		// Update viewport size
         int display_w, display_h;
         glfwGetFramebufferSize(Handle.GlfwHandle, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// Setup imgui drawing frame
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		// Update all layers
 		UpdateWindowLayers(Handle);
 
+		// Render to imgui viewport
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+		// Swap the buffers
 		glfwSwapBuffers(Handle.GlfwHandle);
 	}
 

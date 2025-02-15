@@ -75,7 +75,7 @@ int main(int argc, char** argv)
         { "Standings",          CreateLayer("Standings", 0.f, 0.f, 20.f, 20.f, UpdateStandingsLayer) },
     };
 
-    PushLayer(mainWindow, LayerMap["MainLayer"]);
+    //PushLayer(mainWindow, LayerMap["MainLayer"]);
     PushLayer(mainWindow, LayerMap["MainMenuLayer"]);
     PushLayer(mainWindow, LayerMap["Standings"]);
 

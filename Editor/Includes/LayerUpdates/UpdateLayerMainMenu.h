@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "GLFW/glfw3.h"
 #include "AppContext.h"
 #include <vector>
