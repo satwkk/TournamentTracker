@@ -1,10 +1,11 @@
 #pragma once
 
-struct Window;
-struct Team;
+struct window;
+struct team;
+struct tournament;
 
-struct AppContext
+struct appcontext
 {
-	Window* MainWindowHandle;
-	std::vector<Team> RegisteredTeams;
+	window* main_window_handle;
+	tournament* tournament_ref;
 };

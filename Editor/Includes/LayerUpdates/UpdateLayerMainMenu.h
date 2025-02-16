@@ -7,8 +7,9 @@
 #include "Tournament.h"
 
 char g_TeamNameBuffer[50];
+std::vector<team> registered_teams;
 
-static void UpdateLayer_MainMenu(const Window& Handle)
+static void UpdateLayer_MainMenu(appcontext* ctx)
 {
 	{
 		ImGui::Begin("Team Creation", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNavInputs);
@@ -24,21 +25,24 @@ static void UpdateLayer_MainMenu(const Window& Handle)
 
 			ImGui::InputText("Team name", g_TeamNameBuffer, IM_ARRAYSIZE(g_TeamNameBuffer));
 
-			AppContext* ctx = (AppContext*)glfwGetWindowUserPointer(Handle.GlfwHandle);
-
 			if (ImGui::Button("Register Team"))
 			{
-				Team team = {};
-				team.TeamName = std::string{ g_TeamNameBuffer };
-				ctx->RegisteredTeams.push_back(team);
+				team created_team = {};
+				created_team.team_name = std::string{ g_TeamNameBuffer };
+				registered_teams.push_back(created_team);
 
 				memset(g_TeamNameBuffer, 0, sizeof(g_TeamNameBuffer));
 			}
 
 			if (ImGui::Button("Start Tournament"))
 			{
-				InitializeTournament(&ctx->RegisteredTeams[0], ctx->RegisteredTeams.size(), 5);
-				RenderWindowNextLayer(const_cast<Window&>(Handle));
+				ctx->tournament_ref = init_tournament(&registered_teams[0], registered_teams.size(), 5);
+
+				if (ctx->tournament_ref != nullptr) 
+				{
+					advance_match_day(ctx->tournament_ref);
+					render_next_layer(ctx->main_window_handle);
+				}
 			}
 
 			// Registered team table
@@ -49,20 +53,20 @@ static void UpdateLayer_MainMenu(const Window& Handle)
 				{
 					ImGui::TableSetupColumn("Team Name");
 
-					for (uint32_t i = 0; i < ctx->RegisteredTeams.size(); i++)
+					for (uint32_t i = 0; i < registered_teams.size(); i++)
 					{
 						ImGui::TableNextRow();
 						ImGui::TableSetColumnIndex(0);
-						ImGui::Text("%s", ctx->RegisteredTeams[i].TeamName.c_str());
+						ImGui::Text("%s", registered_teams[i].team_name.c_str());
 
 						// Remove team buttons
 						if (ImGui::Button(("-##" + std::to_string(i)).c_str()))
 						{
-							for (auto it = ctx->RegisteredTeams.begin(); it != ctx->RegisteredTeams.end(); it++)
+							for (auto it = registered_teams.begin(); it != registered_teams.end(); it++)
 							{
-								if (it->TeamName == ctx->RegisteredTeams[i].TeamName)
+								if (it->team_name == registered_teams[i].team_name)
 								{
-									ctx->RegisteredTeams.erase(it);
+									registered_teams.erase(it);
 									break;
 								}
 							}

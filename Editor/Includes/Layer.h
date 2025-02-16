@@ -1,12 +1,14 @@
 #pragma once
 
-struct Window;
+#include "AppContext.h"
 
-struct Layer
+struct window;
+
+struct layer
 {
-	const char* Id;
-	void (*UpdateLayerCallback)(const Window& Handle);
+	const char* id;
+	void (*update_layer_fn)(appcontext* ctx);
 };
 
-Layer CreateLayer(const char* id, float posX, float posY, float width, float height, void (*UpdateCallback)(const Window& Handle));
-void UpdateLayer(const Window& Handle, const Layer& Layer);
+layer create_layer(const char* id, float posX, float posY, float width, float height, void (*UpdateCallback)(appcontext* ctx));
+void update_layer(appcontext* ctx, const layer& layer);

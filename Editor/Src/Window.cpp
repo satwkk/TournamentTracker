@@ -5,48 +5,51 @@
 #include "backends/imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 
-bool CreateWindow(const WindowData& Data, Window& OutWindowHandle)
+bool create_window(const window_data& data, window& out_handle)
 {
-	Window wnd = {};
-	wnd.Data = Data;
+	window wnd = {};
+	wnd.data = data;
 	
-	auto* windowHandle = glfwCreateWindow(wnd.Data.Width, wnd.Data.Height, wnd.Data.Name, nullptr, nullptr);
+	auto* handle = glfwCreateWindow(wnd.data.width, wnd.data.height, wnd.data.name, nullptr, nullptr);
 
-	if (!windowHandle)
+	if (!handle)
 	{
 		std::cerr << "Window creation failed" << std::endl;
 		return false;
 	}
 
-	wnd.GlfwHandle = windowHandle;
-	glfwMakeContextCurrent(wnd.GlfwHandle);
+	wnd.glfw_handle = handle;
+
+	glfwSetWindowSizeLimits(handle, 200, 200, data.width, data.height);
+	glfwMakeContextCurrent(wnd.glfw_handle);
 	glfwSwapInterval(1);
 
-	OutWindowHandle = wnd;
+	out_handle = wnd;
 
 	return true;
 }
 
-void PushLayer(Window& Handle, Layer& NewLayer)
+void push_layer(window* hwnd, layer& new_layer)
 {
-	Handle.LayerData.LayerStack.push_back(NewLayer);
+	hwnd->layer_data.layer_stack.push_back(new_layer);
 }
 
-void UpdateWindowLayers(const Window& Handle)
+void update_window_layers(appcontext* ctx)
 {
-	UpdateLayer(Handle, Handle.LayerData.LayerStack[Handle.LayerData.CurrentLayerIndex]);
+	update_layer(ctx, ctx->main_window_handle->layer_data.layer_stack[ctx->main_window_handle->layer_data.current_layer_index]);
 }
 
-void UpdateWindow(const Window& Handle)
+void update_window(appcontext* ctx)
 {
-	while (!glfwWindowShouldClose(Handle.GlfwHandle))
+	while (!glfwWindowShouldClose(ctx->main_window_handle->glfw_handle))
 	{
 		// Poll events
 		glfwPollEvents();
 
 		// Update viewport size
+
         int display_w, display_h;
-        glfwGetFramebufferSize(Handle.GlfwHandle, &display_w, &display_h);
+        glfwGetFramebufferSize(ctx->main_window_handle->glfw_handle, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -56,30 +59,30 @@ void UpdateWindow(const Window& Handle)
 		ImGui::NewFrame();
 
 		// Update all layers
-		UpdateWindowLayers(Handle);
+		update_window_layers(ctx);
 
 		// Render to imgui viewport
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Swap the buffers
-		glfwSwapBuffers(Handle.GlfwHandle);
+		glfwSwapBuffers(ctx->main_window_handle->glfw_handle);
 	}
 
-	glfwDestroyWindow(Handle.GlfwHandle);
+	glfwDestroyWindow(ctx->main_window_handle->glfw_handle);
 	glfwTerminate();
 }
 
-void RenderWindowNextLayer(Window& Handle)
+void render_next_layer(window* hwnd)
 {
-	Handle.LayerData.CurrentLayerIndex = (Handle.LayerData.CurrentLayerIndex + 1) % Handle.LayerData.LayerStack.size();
+	hwnd->layer_data.current_layer_index = (hwnd->layer_data.current_layer_index + 1) % hwnd->layer_data.layer_stack.size();
 }
 
-void RenderWindowPreviousLayer(Window& Handle)
+void render_prev_layer(window* hwnd)
 {
-	if (--Handle.LayerData.CurrentLayerIndex < 0)
+	if (--hwnd->layer_data.current_layer_index < 0)
 	{
-		Handle.LayerData.CurrentLayerIndex = Handle.LayerData.LayerStack.size() - 1;
+		hwnd->layer_data.current_layer_index = hwnd->layer_data.layer_stack.size() - 1;
 	}
 
 }

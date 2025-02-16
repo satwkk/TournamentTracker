@@ -18,7 +18,7 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
-int InitApp()
+int app_init()
 {
     if (!glfwInit())
         return -1;
@@ -28,7 +28,7 @@ int InitApp()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 }
 
-void InitImguiContext(const Window& Handle)
+void imgui_init(const window& Handle)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -38,50 +38,50 @@ void InitImguiContext(const Window& Handle)
 
     ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(Handle.GlfwHandle, true);
+    ImGui_ImplGlfw_InitForOpenGL(Handle.glfw_handle, true);
 
     ImGui_ImplOpenGL3_Init("#version 130");
 }
 
 int main(int argc, char** argv)
 {
-    AppContext Context = {};
+    appcontext ctx = {};
 
-    if (!InitApp())
+    if (!app_init())
     {
         std::cerr << "App initialization failed" << std::endl;
         return -1;
     }
 
-    WindowData data = {};
-    data.Height = 600.f;
-    data.Width = 800.f;
-    data.Name = "Tournament Tracker";
+    window_data data = {};
+    data.height = 600.f;
+    data.width = 800.f;
+    data.name = "Tournament Tracker";
 
-    Window mainWindow = {};
-    if (!CreateWindow(data, mainWindow))
+    window main_window = {};
+    if (!create_window(data, main_window))
     {
         std::cerr << "Window creation failed" << std::endl;
         return -1;
     }
 
-    glfwSetWindowUserPointer(mainWindow.GlfwHandle, &Context);
-    InitImguiContext(mainWindow);
+    glfwSetWindowUserPointer(main_window.glfw_handle, &ctx);
+    imgui_init(main_window);
 
     // Create layers
-    std::map<std::string, Layer> LayerMap = {
-        { "MainLayer",          CreateLayer("MainLayer", 0.f, 0.f, 20.f, 20.f, UpdateMainLayer) },
-        { "MainMenuLayer",      CreateLayer("MainMenuLayer", 0.f, 0.f, 20.f, 20.f, UpdateMainMenuLayer) },
-        { "Standings",          CreateLayer("Standings", 0.f, 0.f, 20.f, 20.f, UpdateStandingsLayer) },
+    std::map<std::string, layer> LayerMap = {
+        { "MainLayer",          create_layer("MainLayer", 0.f, 0.f, 20.f, 20.f, UpdateMainLayer) },
+        { "MainMenuLayer",      create_layer("MainMenuLayer", 0.f, 0.f, 20.f, 20.f, UpdateMainMenuLayer) },
+        { "Standings",          create_layer("Standings", 0.f, 0.f, 20.f, 20.f, UpdateStandingsLayer) },
     };
 
     //PushLayer(mainWindow, LayerMap["MainLayer"]);
-    PushLayer(mainWindow, LayerMap["MainMenuLayer"]);
-    PushLayer(mainWindow, LayerMap["Standings"]);
+    push_layer(&main_window, LayerMap["MainMenuLayer"]);
+    push_layer(&main_window, LayerMap["Standings"]);
 
     // CONTEXT INITIALIZATION, DO IT AT LAST WHEN EVERYTHING IS INITIALIZED
-    Context.MainWindowHandle = &mainWindow;
-    UpdateWindow(mainWindow);
+    ctx.main_window_handle = &main_window;
+    update_window(&ctx);
 
     return 0;
 }

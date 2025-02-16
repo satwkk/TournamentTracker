@@ -1,79 +1,85 @@
-#pragma once
+﻿#pragma once
 
 #include <vector>
 
 #include "AppContext.h"
 #include "Window.h"
 
-static void UpdateLayer_Standings(const Window& Handle)
+static bool b_show_standings = true;
+
+static void UpdateLayer_Standings(appcontext* ctx)
 {
-	ImGui::Begin("Standings", nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoNavInputs);
+    ImVec2 window_size = {};
+    get_window_size(ctx->main_window_handle, window_size);
 
-	ImVec2 windowSize = {};
-	GetWindowSize(Handle, windowSize);
-	ImGui::SetWindowSize(windowSize);
+    if (b_show_standings) {
+        ImGui::Begin("Standings", nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMouseInputs);
 
-	ImGui::SetWindowPos(ImVec2(0, 0));
+        ImGui::SetWindowSize(window_size);
 
-	// Menu bar
-	{
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("Statistics"))
-			{
-				if (ImGui::MenuItem("Add Statistics"))
-				{
-					if (ImGui::BeginPopupContextWindow("Statistics"))
-					{
-						ImGui::EndPopup();
-					}
-				}
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-	}
+        ImGui::SetWindowPos(ImVec2(0, 0));
 
-	// Editable league table
-	{
-		if (ImGui::BeginTable("StandingsTable", 4))
-		{
-			ImGui::TableSetupColumn("TeamName");
+        // League table
+        {
+            if (ImGui::BeginTable("StandingsTable", 4))
+            {
+                ImGui::TableSetupColumn("TeamName");
 
-			// Draw the headers
-			ImGui::TableNextRow();
+                // Draw the headers
+                ImGui::TableNextRow();
 
-			ImGui::TableSetColumnIndex(0);
-			ImGui::Text("Team Name");
+                ImGui::TableSetColumnIndex(0);
+                ImGui::Text("Team Name");
 
-			ImGui::TableSetColumnIndex(1);
-			ImGui::Text("Wins");
+                ImGui::TableSetColumnIndex(1);
+                ImGui::Text("Wins");
 
-			ImGui::TableSetColumnIndex(2);
-			ImGui::Text("Loss");
+                ImGui::TableSetColumnIndex(2);
+                ImGui::Text("Loss");
 
-			ImGui::TableSetColumnIndex(3);
-			ImGui::Text("Draws");
+                ImGui::TableSetColumnIndex(3);
+                ImGui::Text("Draws");
 
-			for (uint32_t i = 0; Context != nullptr && i < Context->NumRegisteredTeams; i++)
-			{
-				ImGui::TableNextRow();
-				ImGui::TableSetColumnIndex(0);
-				ImGui::Text("%s", Context->RegisteredTeams[i].TeamName.c_str());
+                // TODO: Maybe wanna do this some other way, not optimal to sort it every single frame ?
+                std::sort(ctx->tournament_ref->begin(), ctx->tournament_ref->end(), [](team a, team b) {
+                    return a.statistics.win_percentage() > b.statistics.win_percentage();
+                    });
 
-				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%s", std::to_string(Context->RegisteredTeams[i].Statistics.NumWins).c_str());
+                for (uint32_t i = 0; ctx != nullptr && i < ctx->tournament_ref->n_teams; i++)
+                {
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("%s", ctx->tournament_ref->table.playing_teams[i].team_name.c_str());
 
-				ImGui::TableSetColumnIndex(2);
-				ImGui::Text("%s", std::to_string(Context->RegisteredTeams[i].Statistics.NumLoss).c_str());
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::Text("%s", std::to_string(ctx->tournament_ref->table.playing_teams[i].statistics.n_wins).c_str());
 
-				ImGui::TableSetColumnIndex(3);
-				ImGui::Text("%s", std::to_string(Context->RegisteredTeams[i].Statistics.NumDraw).c_str());
-			}
+                    ImGui::TableSetColumnIndex(2);
+                    ImGui::Text("%s", std::to_string(ctx->tournament_ref->table.playing_teams[i].statistics.n_loss).c_str());
 
-			ImGui::EndTable();
-		}
-	}
+                    ImGui::TableSetColumnIndex(3);
+                    ImGui::Text("%s", std::to_string(ctx->tournament_ref->table.playing_teams[i].statistics.n_draw).c_str());
+                }
 
-	ImGui::End();
+                ImGui::EndTable();
+            }
+        }
+
+        ImGui::End();
+    }
+
+    else {
+        // Match days
+
+    }
+
+    // Buttons
+    {
+        ImGui::Begin("Test", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoNavInputs);
+        ImGui::SetWindowPos(ImVec2(window_size.x - 200, window_size.y - 50));
+        if (ImGui::Button("Standings")) { b_show_standings = true; }
+        ImGui::SameLine();
+        if (ImGui::Button("Matches")) { b_show_standings = false; }
+        ImGui::End();
+    }
 }

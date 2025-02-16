@@ -7,42 +7,44 @@
 
 struct GLFWwindow;
 
-struct WindowData
+typedef GLFWwindow glfw_window;
+
+struct window_data
 {
-	float Height;
-	float Width;
-	const char* Name;
+	float height;
+	float width;
+	const char* name;
 };
 
-struct LayerData
+struct s_layer_data
 {
-	std::vector<Layer> LayerStack;
-	uint32_t CurrentLayerIndex = 0;
+	std::vector<layer> layer_stack;
+	uint32_t current_layer_index = 0;
 };
 
-struct Window
+struct window
 {
-	WindowData Data;
-	LayerData LayerData;
-	GLFWwindow* GlfwHandle;
+	window_data data;
+	s_layer_data layer_data;
+	glfw_window* glfw_handle;
 };
 
-bool CreateWindow(const WindowData& Data, Window& OutWindowHandle);
+bool create_window(const window_data& data, window& out_handle);
 
-void PushLayer(Window& Handle, Layer& NewLayer);
+void push_layer(window* hwnd, layer& new_layer);
 
-void UpdateWindowLayers(const Window& Handle);
+void update_window_layers(appcontext* ctx);
 
-void UpdateWindow(const Window& Handle);
+void update_window(appcontext* ctx);
 
-void RenderWindowNextLayer(Window& Handle);
+void render_next_layer(window* hwnd);
 
-void RenderWindowPreviousLayer(Window& Handle);
+void render_prev_layer(window* hwnd);
 
-static void GetWindowSize(const Window& Handle, ImVec2& OutSize)
+static void get_window_size(window* handle, ImVec2& out_size)
 {
 	int width = 0, height = 0;
-	glfwGetWindowSize(Handle.GlfwHandle, &width, &height);
-	OutSize.x = (float)width;
-	OutSize.y = (float)height;
+	glfwGetWindowSize(handle->glfw_handle, &width, &height);
+	out_size.x = (float)width;
+	out_size.y = (float)height;
 }

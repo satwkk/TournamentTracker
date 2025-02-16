@@ -4,6 +4,6 @@
 #include "LayerUpdates/UpdateLayerMainMenu.h"
 #include "LayerUpdates/UpdateStandingsLayer.h"
 
-static void(*UpdateMainLayer)(const Window& Handle) = UpdateLayer_Main;
-static void(*UpdateMainMenuLayer)(const Window& Handle) = UpdateLayer_MainMenu;
-static void(*UpdateStandingsLayer)(const Window& Handle) = UpdateLayer_Standings;
+static void(*UpdateMainLayer)(appcontext* ctx) = UpdateLayer_Main;
+static void(*UpdateMainMenuLayer)(appcontext* ctx) = UpdateLayer_MainMenu;
+static void(*UpdateStandingsLayer)(appcontext* ctx) = UpdateLayer_Standings;

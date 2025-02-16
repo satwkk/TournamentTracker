@@ -4,15 +4,16 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 #include "Window.h"
+#include "AppContext.h"
 #include "Vector2.h"
 
-static void UpdateLayer_Main(const Window& Handle)
+static void UpdateLayer_Main(appcontext* ctx)
 {
     // Background
     {
         ImGui::Begin("Background", nullptr, ImGuiWindowFlags_NoMouseInputs);
         ImVec2 size = {};
-        GetWindowSize(Handle, size);
+        get_window_size(ctx->main_window_handle, size);
 
         ImGui::SetWindowPos(ImVec2(0.f, 0.f));
         ImGui::SetWindowSize(size);
@@ -33,7 +34,7 @@ static void UpdateLayer_Main(const Window& Handle)
             // Create tournament button
             if (ImGui::Button("Create Tournament"))
             {
-                RenderWindowNextLayer(const_cast<Window&>(Handle));
+                render_next_layer(ctx->main_window_handle);
             }
 
             ImGui::End();

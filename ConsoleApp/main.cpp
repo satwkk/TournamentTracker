@@ -2,26 +2,26 @@
 #include "RNG.h"
 #include <vector>
 
-void SimulateMatchDays()
+void sim_match_days(tournament* ctx)
 {
-	for (int i = 0; i < Context->TotalMatchDays; i++)
+	for (int i = 0; i < ctx->total_match_days; i++)
 	{
-		const MatchDay& matchDay = NextMatchDay();
+		const match_day& match_day = advance_match_day(ctx);
 
-		for (uint32_t i = 0; i < matchDay.NumMatchupPairs; i++)
+		for (uint32_t i = 0; i < match_day.num_matchup_pairs; i++)
 		{
-			TeamPair* pair = &matchDay.MatchupPairs[i];
+			team_pair* pair = &match_day.matchup_pairs[i];
 
-			bool teamAWin = GenerateRandomNumberNormalized() > 0.5f ? true : false;
+			bool teamAWin = gen_rand_number_normalized() > 0.5f ? true : false;
 
-			const TeamStatistics* newTeamAStats = ModifyTeamStatistics(pair->TeamA, teamAWin ? EModificationType::WIN : EModificationType::LOSS);
-			const TeamStatistics* newTeamBStats = ModifyTeamStatistics(pair->TeamB, teamAWin ? EModificationType::LOSS : EModificationType::WIN);
+			const team_statistics* new_stat_a = register_statistics(pair->team_a, teamAWin ? modification_type::WIN : modification_type::LOSS);
+			const team_statistics* new_stat_b = register_statistics(pair->team_b, teamAWin ? modification_type::LOSS : modification_type::WIN);
 
-			std::cout << "Team " << pair->TeamA->TeamName << " after matchday " << matchDay.MatchDayNumber << std::endl;
-			PrintTeamStat(newTeamAStats);
+			std::cout << "Team " << pair->team_a->team_name << " after matchday " << match_day.match_day_number << std::endl;
+			print_team_stat(new_stat_a);
 
-			std::cout << "Team " << pair->TeamB->TeamName << " after matchday " << matchDay.MatchDayNumber << std::endl;
-			PrintTeamStat(newTeamBStats);
+			std::cout << "Team " << pair->team_b->team_name << " after matchday " << match_day.match_day_number << std::endl;
+			print_team_stat(new_stat_b);
 		}
 
 		std::cout << "Press enter to move to next match day: ";
@@ -35,15 +35,15 @@ int main()
 	
 	std::cout << "Enter team names" << std::endl;
 
-	std::vector<Team> teamModels{};
+	std::vector<team> team_models{};
 
 	bool finished = false;
 	while (!finished)
 	{
-		Team team;
+		team team;
 		std::cout << "> ";
-		std::cin >> team.TeamName;
-		teamModels.push_back(team);
+		std::cin >> team.team_name;
+		team_models.push_back(team);
 
 		std::cout << "Do you wish to continue(y, n): ";
 		char ch;
@@ -72,13 +72,14 @@ int main()
 	std::cout << "Enter total number of match days to play: ";
 	std::cin >> matchDays;
 
-	if (!InitializeTournament(&teamModels[0], teamModels.size(), matchDays))
+	tournament* ctx = init_tournament(&team_models[0], team_models.size(), matchDays);
+
+	if (ctx == nullptr)
 	{
 		fprintf(stderr, "Could not initialize tournament");
 		return -1;
 	}
 
-	PrintAllTeams();
-
-	SimulateMatchDays();
+	print_all_teams(ctx);
+	sim_match_days(ctx);
 }

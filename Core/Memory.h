@@ -3,7 +3,7 @@
 #include <cstdint>
 
 template<typename TDest, typename TSrc>
-void MemMapCopy(TDest* destination, TSrc* src, uint32_t srcSizeBytes)
+void mem_map_copy(TDest* destination, TSrc* src, uint32_t srcSizeBytes)
 {
 	if (src == nullptr)
 	{
